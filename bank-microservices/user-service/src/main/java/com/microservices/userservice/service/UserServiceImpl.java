@@ -1,9 +1,6 @@
 package com.microservices.userservice.service;
 
-import com.microservices.userservice.dto.UserCreateDTO;
-import com.microservices.userservice.dto.UserDeleteDTO;
-import com.microservices.userservice.dto.UserReadOnlyDTO;
-import com.microservices.userservice.dto.UserUpdateDTO;
+import com.microservices.userservice.dto.*;
 import com.microservices.userservice.exception.EmailAlreadyExistsException;
 import com.microservices.userservice.exception.IdAlreadyExistsException;
 import com.microservices.userservice.exception.PasswordIsNotConfirmedException;
@@ -18,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * User Service Implementation
@@ -39,6 +37,7 @@ public class UserServiceImpl implements IUserService {
      */
 
     @Override
+    @Transactional
     public UserReadOnlyDTO createUser(UserCreateDTO userCreateDTO) {
 
         // Check if email exists
@@ -85,6 +84,7 @@ public class UserServiceImpl implements IUserService {
      */
 
     @Override
+    @Transactional
     public UserReadOnlyDTO updateUser(UserUpdateDTO dto) throws EntityNotFoundException, EmailAlreadyExistsException, UsernameAlreadyExistsException, IdAlreadyExistsException, PasswordIsNotConfirmedException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -130,7 +130,27 @@ public class UserServiceImpl implements IUserService {
         return userReadOnlyDTO;
     }
 
+    @Override
+    public UserReadOnlyDTO updateUsernameAndEmail(UserUpdateUsernameAndEmailDTO dto) throws EntityNotFoundException, EmailAlreadyExistsException, UsernameAlreadyExistsException {
+        UserGetCurrentLoggedInUserDTO currentUser = getUser();
+        String username = currentUser.getUsername();
+        User user = userRepository.findByUsername(username).orElseThrow(EntityNotFoundException::new);
 
+        if (!user.getEmail().equals(dto.getEmail()) && userRepository.existsByEmail(dto.getEmail())) {
+            throw new EmailAlreadyExistsException("Email already exists");
+        }
+
+        if (!user.getUsername().equals(dto.getUsername()) && userRepository.existsByUsername(dto.getUsername())) {
+            throw new UsernameAlreadyExistsException("Username already exists");
+        }
+
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+
+        user = userRepository.save(user);
+
+        return userMapper.toUserReadOnlyDTO(user);
+    }
 
     /**
      * Delete the current user
@@ -138,11 +158,29 @@ public class UserServiceImpl implements IUserService {
      */
 
     @Override
+    @Transactional
     public UserDeleteDTO deleteUser() throws EntityNotFoundException {
+        log.info("Deleting the current user");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         User user = userRepository.findByUsername(currentPrincipalName).orElseThrow(EntityNotFoundException::new);
         userRepository.delete(user);
+        log.info("User deleted with ID: {}", user.getId());
         return userMapper.toUserDeleteDTO(user);
+    }
+
+    /**
+     * Get the current user
+     * @return UserReadOnlyDTO
+     */
+
+    @Override
+    public UserGetCurrentLoggedInUserDTO getUser() throws EntityNotFoundException {
+        log.info("Getting the current user");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User user = userRepository.findByUsername(currentPrincipalName).orElseThrow(EntityNotFoundException::new);
+        log.info("User retrieved with ID: {}", user.getId());
+        return userMapper.toUserGetCurrentLoggedInUserDTO(user);
     }
 }

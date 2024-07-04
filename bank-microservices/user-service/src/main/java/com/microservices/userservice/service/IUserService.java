@@ -1,9 +1,6 @@
 package com.microservices.userservice.service;
 
-import com.microservices.userservice.dto.UserCreateDTO;
-import com.microservices.userservice.dto.UserDeleteDTO;
-import com.microservices.userservice.dto.UserReadOnlyDTO;
-import com.microservices.userservice.dto.UserUpdateDTO;
+import com.microservices.userservice.dto.*;
 import com.microservices.userservice.exception.EmailAlreadyExistsException;
 import com.microservices.userservice.exception.IdAlreadyExistsException;
 import com.microservices.userservice.exception.PasswordIsNotConfirmedException;
@@ -37,4 +34,13 @@ public interface IUserService {
      */
 
     UserDeleteDTO deleteUser() throws EntityNotFoundException;
+
+    /**
+     * Get the current user
+     * @return UserReadOnlyDTO
+     */
+
+    UserGetCurrentLoggedInUserDTO getUser() throws EntityNotFoundException;
+
+    UserReadOnlyDTO updateUsernameAndEmail(UserUpdateUsernameAndEmailDTO dto) throws EntityNotFoundException, EmailAlreadyExistsException, UsernameAlreadyExistsException;
 }
