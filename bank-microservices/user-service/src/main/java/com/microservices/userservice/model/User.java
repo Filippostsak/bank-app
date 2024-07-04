@@ -1,6 +1,7 @@
 package com.microservices.userservice.model;
 
 import com.microservices.userservice.enums.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ import java.util.Collections;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Schema(name = "User", description = "Entity for storing user information")
 public class User extends AbstractEntity implements UserDetails {
 
     @Column(unique = true, nullable = false)
