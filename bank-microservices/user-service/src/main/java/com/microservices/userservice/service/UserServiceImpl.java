@@ -19,6 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * User Service Implementation
+ */
 
 @Service
 @Slf4j
@@ -28,6 +31,12 @@ public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+
+    /**
+     * Create a new user
+     * @param userCreateDTO UserCreateDTO
+     * @return UserReadOnlyDTO
+     */
 
     @Override
     public UserReadOnlyDTO createUser(UserCreateDTO userCreateDTO) {
@@ -68,6 +77,12 @@ public class UserServiceImpl implements IUserService {
 
         return userReadOnlyDTO;
     }
+
+    /**
+     * Update an existing user
+     * @param dto UserUpdateDTO
+     * @return UserReadOnlyDTO
+     */
 
     @Override
     public UserReadOnlyDTO updateUser(UserUpdateDTO dto) throws EntityNotFoundException, EmailAlreadyExistsException, UsernameAlreadyExistsException, IdAlreadyExistsException, PasswordIsNotConfirmedException {
@@ -115,6 +130,12 @@ public class UserServiceImpl implements IUserService {
         return userReadOnlyDTO;
     }
 
+
+
+    /**
+     * Delete the current user
+     * @return UserDeleteDTO
+     */
 
     @Override
     public UserDeleteDTO deleteUser() throws EntityNotFoundException {

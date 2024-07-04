@@ -6,6 +6,9 @@ import com.microservices.userservice.model.User;
 import com.microservices.userservice.repository.UserRepository;
 import com.microservices.userservice.service.TokenBlacklistService;
 import com.microservices.userservice.util.JwtTokenProvider;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +18,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+
+/**
+ * AuthController
+ */
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -26,6 +33,16 @@ public class AuthController {
     private final TokenBlacklistService tokenBlacklistService;
     private final UserRepository userRepository;
 
+    /**
+     * Authenticate user
+     * @param loginDTO LoginDTO
+     * @return LoginResponseDTO
+     */
+    @Operation(summary = "Authenticate user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User authenticated successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> authenticateUser(@RequestBody LoginDTO loginDTO) {
         Authentication authentication = authenticationManager.authenticate(
@@ -49,6 +66,11 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponseDTO(jwt));
     }
 
+    @Operation(summary = "Logout user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User logged out successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @PostMapping("/logout")
     public ResponseEntity<Void> logoutUser(@RequestHeader("Authorization") String token) {
         String jwt = token.substring(7);

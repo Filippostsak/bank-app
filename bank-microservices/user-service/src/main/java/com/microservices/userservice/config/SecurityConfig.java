@@ -18,6 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * SecurityConfig
+ */
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -27,10 +31,21 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    /**
+     * Password encoder
+     * @return PasswordEncoder
+     */
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    /**
+     * Authentication manager
+     * @param http HttpSecurity
+     * @return AuthenticationManager
+     */
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
@@ -38,6 +53,12 @@ public class SecurityConfig {
         builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
         return builder.build();
     }
+
+    /**
+     * Security filter chain
+     * @param http HttpSecurity
+     * @return SecurityFilterChain
+     */
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -48,6 +69,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/admin/**").hasRole(Role.ADMIN.name())
                         .requestMatchers("/api/v1/users/create").permitAll()
                         .requestMatchers("/api/v1/users/**").hasAnyRole(Role.USER.name(), Role.ADMIN.name(), Role.EMPLOYEE.name())
+                        .requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
