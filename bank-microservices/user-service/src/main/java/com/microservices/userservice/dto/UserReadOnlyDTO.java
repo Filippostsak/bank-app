@@ -8,10 +8,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * UserReadOnlyDTO
+ */
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Schema(name = "UserReadOnly", description = "DTO for reading user details")
+@Schema(name = "UserReadOnlyDTO", description = "DTO for reading user details")
 public class UserReadOnlyDTO {
 
     private Long id;

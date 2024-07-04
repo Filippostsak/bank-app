@@ -15,17 +15,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Utility class for JWT token generation and validation
+ */
 @Component
 public class JwtTokenProvider {
+
+    /**
+     * JWT secret key
+     */
 
     @Value("${jwt.secret}")
     private String jwtSecret;
 
+    /**
+     * JWT expiration time
+     */
+
     @Value("${jwt.expiration}")
     private int jwtExpiration;
 
+    /**
+     * Date format for JWT token
+     */
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    /**
+     * Generate JWT token
+     * @return JWT token
+     */
     public String generateToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
@@ -51,6 +69,12 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    /**
+     * Validate JWT token
+     * @param token JWT token
+     * @return true if token is valid, false otherwise
+     */
+
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
@@ -63,14 +87,32 @@ public class JwtTokenProvider {
         }
     }
 
+    /**
+     * Get username from JWT token
+     * @param token JWT token
+     * @return username
+     */
+
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
+    /**
+     * Get claim from JWT token
+     * @param token JWT token
+     * @param claimsResolver Claims resolver
+     * @return claim
+     */
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
+
+    /**
+     * Get all claims from JWT token
+     * @param token JWT token
+     * @return claims
+     */
 
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();

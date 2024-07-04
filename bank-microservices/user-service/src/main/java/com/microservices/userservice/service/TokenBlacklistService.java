@@ -7,11 +7,20 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+/**
+ * Token Blacklist Service
+ */
+
 @Service
 @RequiredArgsConstructor
 public class TokenBlacklistService implements ITokenBlacklistService{
 
     private final TokenBlacklistRepository tokenBlacklistRepository;
+
+    /**
+     * Blacklist a token
+     * @param token String
+     */
 
     @Override
     public void blacklistToken(String token) {
@@ -20,6 +29,12 @@ public class TokenBlacklistService implements ITokenBlacklistService{
         tokenBlacklist.setBlacklistedAt(LocalDateTime.now());
         tokenBlacklistRepository.save(tokenBlacklist);
     }
+
+    /**
+     * Check if a token is blacklisted
+     * @param token String
+     * @return boolean
+     */
 
     @Override
     public boolean isTokenBlacklisted(String token) {

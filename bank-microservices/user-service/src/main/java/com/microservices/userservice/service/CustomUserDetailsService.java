@@ -13,6 +13,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    /**
+     * Load user by username
+     * @param username String
+     * @return UserDetails
+     */
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
