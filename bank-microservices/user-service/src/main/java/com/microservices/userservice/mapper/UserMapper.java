@@ -1,9 +1,6 @@
 package com.microservices.userservice.mapper;
 
-import com.microservices.userservice.dto.UserCreateDTO;
-import com.microservices.userservice.dto.UserDeleteDTO;
-import com.microservices.userservice.dto.UserReadOnlyDTO;
-import com.microservices.userservice.dto.UserUpdateDTO;
+import com.microservices.userservice.dto.*;
 import com.microservices.userservice.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -45,6 +42,14 @@ public interface UserMapper {
 
     @Mapping(target = "dateOfBirth", expression = "java(dateToString(user.getDateOfBirth()))")
     UserReadOnlyDTO toUserReadOnlyDTO(User user);
+
+    /**
+     * Map User to UserGetCurrentLoggedInUserDTO
+     * @param user User
+     * @return UserGetCurrentLoggedInUserDTO
+     */
+
+    UserGetCurrentLoggedInUserDTO toUserGetCurrentLoggedInUserDTO(User user);
 
     /**
      * Map UserReadOnlyDTO to User

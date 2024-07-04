@@ -1,9 +1,6 @@
 package com.microservices.userservice.controller;
 
-import com.microservices.userservice.dto.UserCreateDTO;
-import com.microservices.userservice.dto.UserDeleteDTO;
-import com.microservices.userservice.dto.UserReadOnlyDTO;
-import com.microservices.userservice.dto.UserUpdateDTO;
+import com.microservices.userservice.dto.*;
 import com.microservices.userservice.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -59,6 +56,22 @@ public class UserController {
     }
 
     /**
+     * Update username and email
+     * @return UserReadOnlyDTO
+     */
+
+    @Operation(summary = "Update username and email")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Username and email updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
+    @PutMapping("/update/username-email")
+    public ResponseEntity<UserReadOnlyDTO> updateUsernameAndEmail(@Valid @RequestBody UserUpdateUsernameAndEmailDTO dto){
+        UserReadOnlyDTO userReadOnlyDTO = userServiceImpl.updateUsernameAndEmail(dto);
+        return new ResponseEntity<>(userReadOnlyDTO, HttpStatus.OK);
+    }
+
+    /**
      * Delete user
      * @return UserDeleteDTO
      */
@@ -71,6 +84,22 @@ public class UserController {
     public ResponseEntity<UserDeleteDTO> deleteUser(){
         UserDeleteDTO userDeleteDTO = userServiceImpl.deleteUser();
         return new ResponseEntity<>(userDeleteDTO, HttpStatus.OK);
+    }
+
+    /**
+     * Get user details
+     * @return UserReadOnlyDTO
+     */
+
+    @Operation(summary = "Get user details")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User details retrieved successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
+    @GetMapping("/get")
+    public ResponseEntity<UserGetCurrentLoggedInUserDTO> getUser(){
+        UserGetCurrentLoggedInUserDTO user = userServiceImpl.getUser();
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 }
