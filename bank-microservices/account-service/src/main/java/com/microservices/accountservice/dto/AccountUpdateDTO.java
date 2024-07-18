@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Schema(description = "DTO for updating account information")
 public class AccountUpdateDTO {
 
     @NotNull(message = "Username is required")

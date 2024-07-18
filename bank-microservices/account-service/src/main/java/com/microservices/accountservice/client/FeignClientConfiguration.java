@@ -6,6 +6,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+/**
+ * FeignClientConfiguration
+ */
+
 @Configuration
 public class FeignClientConfiguration {
 

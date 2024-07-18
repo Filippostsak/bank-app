@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+
 @FeignClient(name = "user-service", url = "http://localhost:8085/api/v1/users", configuration = FeignClientConfiguration.class)
 public interface UserClient {
 

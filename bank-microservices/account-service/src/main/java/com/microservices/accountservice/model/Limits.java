@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @NoArgsConstructor
@@ -33,17 +34,29 @@ public class Limits extends AbstractEntity {
     @Schema(description = "Transaction limit", example = "600")
     private BigDecimal transactionLimit;
 
-    @Column(name = "daily_transaction_limit", nullable = false)
-    @Schema(description = "Daily transaction limit", example = "1500")
-    private BigDecimal dailyTransactionLimit;
+    @Column(name = "daily_withdraw_limit", nullable = false)
+    @Schema(description = "Daily withdrawal limit", example = "500")
+    private BigDecimal dailyWithdrawLimit;
 
-    @Column(name = "weekly_transaction_limit", nullable = false)
-    @Schema(description = "Weekly transaction limit", example = "7500")
-    private BigDecimal weeklyTransactionLimit;
+    @Column(name = "daily_deposit_limit", nullable = false)
+    @Schema(description = "Daily deposit limit", example = "500")
+    private BigDecimal dailyDepositLimit;
 
-    @Column(name = "monthly_transaction_limit", nullable = false)
-    @Schema(description = "Monthly transaction limit", example = "30000")
-    private BigDecimal monthlyTransactionLimit;
+    @Column(name = "weekly_withdraw_limit", nullable = false)
+    @Schema(description = "Weekly withdrawal limit", example = "3750")
+    private BigDecimal weeklyWithdrawLimit;
+
+    @Column(name = "weekly_deposit_limit", nullable = false)
+    @Schema(description = "Weekly deposit limit", example = "3750")
+    private BigDecimal weeklyDepositLimit;
+
+    @Column(name = "monthly_withdraw_limit", nullable = false)
+    @Schema(description = "Monthly withdrawal limit", example = "15000")
+    private BigDecimal monthlyWithdrawLimit;
+
+    @Column(name = "monthly_deposit_limit", nullable = false)
+    @Schema(description = "Monthly deposit limit", example = "15000")
+    private BigDecimal monthlyDepositLimit;
 
     @ManyToOne
     @JoinColumn(name = "account_id", nullable = false)
