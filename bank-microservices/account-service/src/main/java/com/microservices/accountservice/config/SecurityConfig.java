@@ -42,7 +42,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/account/get").authenticated()
                         .requestMatchers("/api/v1/account/create").authenticated()
+                        .requestMatchers("/api/v1/account/find/accountId").authenticated()
                         .requestMatchers("/api/v1/account/update").authenticated()
+                        .requestMatchers(("/api/v1/transaction/add")).authenticated()
+                        .requestMatchers(("/api/v1/transaction/withdraw")).authenticated()
                         .anyRequest().permitAll()
                 )
                 .exceptionHandling(exception -> exception

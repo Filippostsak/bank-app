@@ -8,12 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Schema(description = "DTO for getting current logged in user")
-public class UserGetCurrentLoggedInUserDTO {
+@Schema(description = "DTO for finding account by id")
+public class AccountFindAccountIdDTO {
 
     private Long id;
+    private String accountNumber;
 
-    private String username;
-
-    private String email;
 }

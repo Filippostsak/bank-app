@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Schema(description = "Account read only data transfer object")
 public class AccountReadOnlyDTO {
 
     @Schema(description = "Account id", example = "1")

@@ -17,23 +17,28 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Schema(name = "Account", description = "Entity for storing account information")
-public class Account extends AbstractEntity{
+public class Account extends AbstractEntity {
 
     @Column(unique = true, nullable = false)
     @Schema(description = "Username of the account", example = "admin")
     private String username;
+
     @Column(nullable = false)
     @Schema(description = "Email of the account", example = "filip@gmail.com")
     private String email;
+
     @Column(name = "account_number", unique = true, nullable = false)
     @Schema(description = "Account number", example = "1234567890")
     private String accountNumber;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "member_ranking", nullable = false)
-    @Schema(description = "Member ranking", example = "REGULAR")
-    private MemberRanking memberRanking;
+    @Schema(description = "Member ranking", example = "STANDARD")
+    private MemberRanking memberRanking = MemberRanking.STANDARD;
+
     @Column(nullable = false, precision = 19, scale = 4)
     @Schema(description = "Balance", example = "1000.00")
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @Schema(description = "Limits")
